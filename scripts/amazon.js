@@ -27,7 +27,7 @@ products.forEach((product) => {
           )}</div>
 
           <div class="product-quantity-container">
-            <select>
+            <select class=js-quantity-selector-${product.id}>
               <option selected value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -59,6 +59,7 @@ document.querySelector(".products-grid").innerHTML = hmtlText;
 document.querySelectorAll(".add-to-cart-button").forEach((button) => {
   button.addEventListener("click", () => {
     const productId = button.dataset.productId;
+    const select = document.querySelector(`.js-quantity-selector-${productId}`);
 
     let matchingItem;
 
@@ -69,12 +70,14 @@ document.querySelectorAll(".add-to-cart-button").forEach((button) => {
     });
 
     if (matchingItem) {
-      matchingItem.Quantity++;
+      matchingItem.Quantity += Number(select.value);
+      select.value = 1;
     } else {
       cart.push({
         productId,
-        Quantity: 1,
+        Quantity: Number(select.value),
       });
+      select.value = 1;
     }
 
     let cartQuantity = 0;
