@@ -1,3 +1,5 @@
+import { cart } from "../data/cart.js";
+import { products } from "../data/products.js";
 let hmtlText = "";
 products.forEach((product) => {
   const html = `<div class="product-container">
