@@ -32,6 +32,9 @@
   align-items: start;
 }
 
+.hideText {
+  display: none;
+}
 @media (max-width: 1000px) {
   .main {
     max-width: 500px;

@@ -1,4 +1,4 @@
-import { cart, addToCart } from "../data/cart.js";
+import { cart, addToCart, updateQuantity } from "../data/cart.js";
 import { products } from "../data/products.js";
 import { formatCurrency } from "./utils/money.js";
 
@@ -98,3 +98,5 @@ document.querySelectorAll(".add-to-cart-button").forEach((button) => {
     cartCount(); // cart count
   });
 });
+const quantitycartHtml = document.querySelector(".cart-quantity");
+quantitycartHtml.innerHTML = updateQuantity();
