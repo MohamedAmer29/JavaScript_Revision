@@ -20,12 +20,12 @@ function addToCart(productId) {
   });
 
   if (matchingItem) {
-    matchingItem.Quantity += Number(select.value);
+    matchingItem.quantity += Number(select.value);
     select.value = 1;
   } else {
     cart.push({
       productId,
-      Quantity: Number(select.value),
+      quantity: Number(select.value),
     });
     select.value = 1;
   }
