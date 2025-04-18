@@ -6,21 +6,34 @@ import {
 } from "../data/cart.js";
 import { products } from "../data/products.js";
 import { formatCurrency } from "./utils/money.js";
+import dayjs from "https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js";
+import { deliveryOptions } from "../data/deliveryOptions.js";
 
 let totalQuantity = updateQuantity();
 
 let searchedItems;
 let htmlText = "";
+
 cart.forEach((item) => {
   // totalQuantity += item.quantity;
   products.forEach((product) => {
     if (product.id === item.productId) searchedItems = product;
   });
+  const deliveryOptionId = item.deliveryOptionId;
+  let deliveryOption;
+  deliveryOptions.forEach((option) => {
+    if (option.id === deliveryOptionId) {
+      deliveryOption = option;
+    }
+  });
+  const today = dayjs();
+  const delivery = today.add(deliveryOption.deliveryDays, "days");
+  const deliveryString = delivery.format("dddd, MMMM D");
 
   const html = `  <div class="cart-item-container remove-cart-item-${
     item.productId
   }">
-            <div class="delivery-date">Delivery date: Wednesday, June 15</div>
+            <div class="delivery-date">Delivery date: ${deliveryString}</div>
 
             <div class="cart-item-details-grid">
               <img
@@ -58,47 +71,44 @@ cart.forEach((item) => {
                 <div class="delivery-options-title">
                   Choose a delivery option:
                 </div>
-
-                <div class="delivery-option">
-                  <input
-                    type="radio"
-                    class="delivery-option-input"
-                    name="delivery-option-${item.productId}"
-                  />
-                  <div>
-                    <div class="delivery-option-date">Tuesday, June 21</div>
-                    <div class="delivery-option-price">FREE Shipping</div>
-                  </div>
-                </div>
-                <div class="delivery-option">
-                  <input
-                    type="radio"
-                    checked
-                    class="delivery-option-input"
-                    name="delivery-option-${item.productId}"
-                  />
-                  <div>
-                    <div class="delivery-option-date">Wednesday, June 15</div>
-                    <div class="delivery-option-price">$4.99 - Shipping</div>
-                  </div>
-                </div>
-                <div class="delivery-option">
-                  <input
-                    type="radio"
-                    class="delivery-option-input"
-                    name="delivery-option-${searchedItems.id}"
-                  />
-                  <div>
-                    <div class="delivery-option-date">Monday, June 13</div>
-                    <div class="delivery-option-price">$9.99 - Shipping</div>
-                  </div>
+                   ${deliveryOptionHtml(item.productId, item)}
+                
+                
+                
+                
                 </div>
               </div>
             </div>
           </div>`;
   htmlText += html;
 });
+function deliveryOptionHtml(productId, item) {
+  let radioHtml = "";
 
+  deliveryOptions.forEach((deliveryOption) => {
+    const today = dayjs();
+    const delivery = today.add(deliveryOption.deliveryDays, "days");
+    const deliveryString = delivery.format("dddd, MMMM D");
+    const isChecked = deliveryOption.id === item.deliveryOptionId;
+    radioHtml += `<div class="delivery-option">
+                  <input
+                    type="radio"
+                    ${isChecked ? "checked" : ""}
+                    class="delivery-option-input"
+                    name="delivery-option-${productId}"
+                  />
+                  <div>
+                    <div class="delivery-option-date">${deliveryString}</div>
+                    <div class="delivery-option-price">${
+                      deliveryOption.pricceCents === 0
+                        ? "Free"
+                        : formatCurrency(deliveryOption.pricceCents)
+                    } Shipping</div>
+                  </div>
+                </div>`;
+  });
+  return radioHtml;
+}
 document.querySelector(".order-summary").innerHTML = htmlText;
 
 document.querySelectorAll(".delete-quantity-link").forEach((button) => {
