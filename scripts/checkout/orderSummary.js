@@ -5,10 +5,14 @@ import {
   updateCart,
   updateDeliveryOption,
 } from "../../data/cart.js";
-import { products } from "../../data/products.js";
+import { products, getProduct } from "../../data/products.js";
 import { formatCurrency } from "../utils/money.js";
+import { renderPaymentSummary } from "./paymentSummary.js";
 import dayjs from "https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js";
-import { deliveryOptions } from "../../data/deliveryOptions.js";
+import {
+  deliveryOptions,
+  getDeliveryOption,
+} from "../../data/deliveryOptions.js";
 
 export function renderOrderSummary() {
   let totalQuantity = updateQuantity();
@@ -17,16 +21,9 @@ export function renderOrderSummary() {
   let htmlText = "";
   cart.forEach((item) => {
     // totalQuantity += item.quantity;
-    products.forEach((product) => {
-      if (product.id === item.productId) searchedItems = product;
-    });
+    searchedItems = getProduct(item.productId);
     const deliveryOptionId = item.deliveryOptionId;
-    let deliveryOption;
-    deliveryOptions.forEach((option) => {
-      if (option.id === deliveryOptionId) {
-        deliveryOption = option;
-      }
-    });
+    const deliveryOption = getDeliveryOption(deliveryOptionId);
     const today = dayjs();
     const delivery = today.add(deliveryOption.deliveryDays, "days");
     const deliveryString = delivery.format("dddd, MMMM D");
@@ -105,9 +102,9 @@ export function renderOrderSummary() {
                     <div>
                       <div class="delivery-option-date">${deliveryString}</div>
                       <div class="delivery-option-price">${
-                        deliveryOption.pricceCents === 0
+                        deliveryOption.priceCents === 0
                           ? "Free"
-                          : formatCurrency(deliveryOption.pricceCents)
+                          : formatCurrency(deliveryOption.priceCents)
                       } Shipping</div>
                     </div>
                   </div>`;
@@ -122,7 +119,7 @@ export function renderOrderSummary() {
       console.log(id);
       removeFromCart(id);
       totalQuantity = updateQuantity();
-
+      renderPaymentSummary();
       // cart.forEach((item) => (totalQuantity += item.quantity));
 
       document.querySelector(`.remove-cart-item-${id}`).remove();
@@ -140,6 +137,7 @@ export function renderOrderSummary() {
       if (update.classList.contains("hideText")) {
         button.innerHTML = "Update";
         updateCart(id, Number(update.value));
+        renderPaymentSummary();
         totalQuantity = updateQuantity();
         quentity.innerHTML = update.value;
       } else {
@@ -165,6 +163,7 @@ export function renderOrderSummary() {
       const { productId, deliveryOptionId } = button.dataset;
       updateDeliveryOption(productId, deliveryOptionId);
       renderOrderSummary();
+      renderPaymentSummary();
     });
   });
 }
