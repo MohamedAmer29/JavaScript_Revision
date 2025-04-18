@@ -64,3 +64,14 @@ export function updateCart(productId, value) {
 
   saveToStorage();
 }
+
+export function updateDeliveryOption(productId, deliveryOptionId) {
+  let matchingItem;
+  cart.forEach((cardItem) => {
+    if (productId === cardItem.productId) {
+      matchingItem = cardItem;
+    }
+  });
+  matchingItem.deliveryOptionId = deliveryOptionId;
+  saveToStorage();
+}
