@@ -1,7 +1,11 @@
 import { cart, addToCart, updateQuantity } from "../data/cart.js";
 import { products, loadProducts } from "../data/products.js";
-import { formatCurrency } from "./utils/money.js";
-loadProducts(renderProductGrid);
+import { loadCart } from "../data/cart.js";
+loadProducts(() => {
+  loadCart(() => {
+    renderProductGrid();
+  });
+});
 function renderProductGrid() {
   let hmtlText = "";
   products.forEach((product) => {

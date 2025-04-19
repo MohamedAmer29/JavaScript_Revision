@@ -1,5 +1,5 @@
-export let cart;
-loadFromStorage();
+// export let cart;
+
 let matchingItem;
 export function loadFromStorage() {
   cart = JSON.parse(localStorage.getItem("cart"));
@@ -96,3 +96,16 @@ export function updateDeliveryOption(productId, deliveryOptionId) {
   matchingItem.deliveryOptionId = deliveryOptionId;
   saveToStorage();
 }
+
+export let cart = [];
+export function loadCart(fun) {
+  const xhr = new XMLHttpRequest();
+  xhr.addEventListener("load", () => {
+    console.log(xhr.response);
+    fun;
+  });
+
+  xhr.open("GET", "https://supersimplebackend.dev/cart");
+  xhr.send();
+}
+loadFromStorage();
