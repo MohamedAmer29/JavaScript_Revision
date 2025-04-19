@@ -28,6 +28,19 @@ class Product {
   getPrice() {
     return `$${formatCurrency(this.priceCents)}`;
   }
+  extraInfoHtml() {
+    return "";
+  }
+}
+class Clothing extends Product {
+  constructor(details) {
+    super(details);
+    this.sizeChartLink = details.sizeChartLink;
+  }
+
+  extraInfoHtml() {
+    return `<a href="${this.sizeChartLink}" target="_black" style="align-self:center; text-decoration:none; color:darkgray;border:2px solid lightblue;border-radius:7px;padding:4px ;">Size Chart</a>`;
+  }
 }
 
 export const products = [
@@ -501,4 +514,9 @@ export const products = [
     priceCents: 2400,
     keywords: ["sweaters", "hoodies", "apparel", "mens"],
   },
-].map((product) => new Product(product));
+].map((product) => {
+  if (product.type === "clothing") {
+    return new Clothing(product);
+  }
+  return new Product(product);
+});
