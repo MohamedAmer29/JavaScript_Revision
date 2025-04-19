@@ -1,7 +1,10 @@
 class Cart {
-  matchingItem = undefined;
-  cartItem = undefined;
-  stroageName = undefined;
+  matchingItem;
+  cartItem;
+  stroageName;
+  constructor(key) {
+    this.stroageName = key;
+  }
   loadFromStorage() {
     this.cartItem = JSON.parse(localStorage.getItem(this.stroageName));
     if (!this.cartItem) {
@@ -106,12 +109,13 @@ class Cart {
   }
 }
 
-const cart = new Cart();
-cart.stroageName = "cart-opp";
-const bussinessCart = new Cart();
-bussinessCart.stroageName = "cart-bussiness";
+const cart = new Cart("cart-opp");
+
+const bussinessCart = new Cart("cart-bussiness");
+
 cart.loadFromStorage();
 bussinessCart.loadFromStorage();
 
 console.log(cart.cartItem);
 console.log(bussinessCart.cartItem);
+console.log(cart instanceof Cart);
