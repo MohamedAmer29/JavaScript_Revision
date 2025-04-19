@@ -42,6 +42,10 @@ class Clothing extends Product {
     return `<a href="${this.sizeChartLink}" target="_black" style="align-self:center; text-decoration:none; color:darkgray;border:2px solid lightblue;border-radius:7px;padding:4px ;">Size Chart</a>`;
   }
 }
+// const date = new Date();
+// console.log(date);
+// console.log(date.toLocaleTimeString());
+console.log(this);
 
 export const products = [
   {
