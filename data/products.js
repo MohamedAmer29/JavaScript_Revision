@@ -61,6 +61,9 @@ export function loadProductsFetch() {
       });
 
       console.log("load products");
+    })
+    .catch((err) => {
+      console.error("Failed To Fetch Data :", err);
     });
   return promise;
 }
