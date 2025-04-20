@@ -1,10 +1,13 @@
 import { cart, addToCart, updateQuantity } from "../data/cart.js";
-import { products, loadProducts } from "../data/products.js";
+import { products, loadProductsFetch } from "../data/products.js";
 import { loadCart } from "../data/cart.js";
-loadProducts(() => {
-  loadCart(() => {
-    renderProductGrid();
-  });
+// loadProducts(() => {
+//   loadCart(() => {
+//     renderProductGrid();
+//   });
+// });
+loadProductsFetch().then(() => {
+  renderProductGrid();
 });
 function renderProductGrid() {
   let hmtlText = "";
